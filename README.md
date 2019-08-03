@@ -7,4 +7,4 @@ Smart Watermark - A program that automatically choose the most visible place on 
 * pyfiglet
 * numpy
 * colorama
-* pyInstaller (For build)
+* pyInstaller (For build) or whatever you want to use
