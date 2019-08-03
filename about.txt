@@ -1,1 +1,6 @@
 Smart Watermark - A program that automatically choose the most visible place on images and put your logo on that place for you
+
+-Contacts-
+Phodi Phoocharoen
+> https://github.com/Phodi-P
+> ppodee17@gmail.com
