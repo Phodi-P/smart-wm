@@ -62,9 +62,10 @@ def pasteRelative(bg, fg, pos, contain=True):
 
     return fg_sides
 
-def pasteLogo(img_path, io_path, logo, logoBrightness, preferedPositions, pickTheMostVisiblePosition, visibilityThreshold, progress_list, printStatus = False):
+def pasteLogo(img_path, io_path, logoPath, logoBrightness, preferedPositions, pickTheMostVisiblePosition, visibilityThreshold, progress_list, printStatus = False):
 
     img = Image.open(os.path.join(io_path[0],img_path))
+    logo = Image.open(logoPath)
 
     logo_sides = None
 

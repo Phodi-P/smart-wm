@@ -1,32 +1,26 @@
-from PIL import Image
-import numpy
+import matplotlib.pyplot as plt
+import numpy as np
+from skimage.measure import _structural_similarity as ssim
+import cv2
 
-def getBrightness(img):
-    """Returns 2d list of brightness calculated from each pixel"""
-    pixel_access = img.load()
-    brightness = numpy.zeros(img.size)
-    for x in range(img.size[0]):
-        for y in range(img.size[1]):
-            pix = pixel_access[x,y]
-            Y = (0.375 * pix[0] + 0.5 * pix[1] + 0.125 * pix[2])
-            if len(pix) > 3:
-                percent = pix[3]/255
-                Y *= percent
-            brightness[x,y] = Y
-    del img
-    return brightness
 
-def getVisibility(img, logoBrightness, logo_sides):
-    """Compare the brightness value of each pixel and average it out"""
-    logo_B = logoBrightness
-    img_B = getBrightness(img)
+def getVisibility(imgPath, logoPath, logo_sides):
+    """Compare the visibility using ssim"""
+    logo_B = cv2.imread(logoPath)
+    img_B = cv2.imread(imgPath)
 
-    avg_diff = 0
-    for x in range(logo_sides["size"][0]):
-        for y in range(logo_sides["size"][1]):
-            diff = abs(logo_B[x,y]-img_B[logo_sides["left"]+x,logo_sides["top"]+y])
-            avg_diff += diff
-    avg_diff /= logo_sides["size"][0]*logo_sides["size"][1]
-    avg_diff *= 100/255
-    avg_diff = 100-avg_diff
-    return avg_diff
+    img_B = img_B[logo_sides["top"]:logo_sides["bottom"],
+    logo_sides["left"]:logo_sides["right"]].copy()
+
+    logo_B = cv2.cvtColor(logo_B, cv2.COLOR_BGR2GRAY)
+    img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2GRAY)
+
+    cv2.imshow("Crop Test", img_B)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    return 1 - ssim.compare_ssim(logo_B, img_B)
+
+
+if __name__ == '__main__':
+    print(getVisibility('./input/DSC_0004.jpg', 'logo.png', {"top": 0, "bottom": 75, "left": 0, "right": 300}))
